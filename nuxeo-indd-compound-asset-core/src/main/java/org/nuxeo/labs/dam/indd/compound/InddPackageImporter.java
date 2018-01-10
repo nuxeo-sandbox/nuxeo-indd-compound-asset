@@ -83,7 +83,6 @@ public class InddPackageImporter extends AbstractFileImporter {
         FileManager fileManager = Framework.getLocalService(FileManager.class);
         Enumeration<? extends ZipEntry> entries = zipFile.entries();
         ZipEntry inddEntry = null;
-        ZipEntry pdfPreviewEntry = null;
         List<Blob> renditions = new ArrayList<>();
 
         DocumentModelList components = new DocumentModelListImpl();
@@ -112,8 +111,8 @@ public class InddPackageImporter extends AbstractFileImporter {
             if (fileName.toLowerCase().endsWith(PDF_EXT)) {
                 Blob fileBlob = new FileBlob(zipFile.getInputStream(entry));
                 fileBlob.setFilename(getFilename(fileName));
+                fileBlob.setMimeType("application/pdf");
                 renditions.add(fileBlob);
-                pdfPreviewEntry = entry;
                 continue;
             }
 
