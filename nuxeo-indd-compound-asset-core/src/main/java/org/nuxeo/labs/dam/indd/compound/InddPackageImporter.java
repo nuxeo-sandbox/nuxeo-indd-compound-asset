@@ -135,13 +135,13 @@ public class InddPackageImporter extends AbstractFileImporter {
 
         DocumentModel inddDoc;
 
-        Blob inddBlob = new FileBlob(zipFile.getInputStream(inddEntry));
+        /*Blob inddBlob = new FileBlob(zipFile.getInputStream(inddEntry));
         inddBlob.setFilename(getFilename(inddEntry.getName()));
-        inddBlob.setMimeType("application/x-indesign");
+        inddBlob.setMimeType("application/zip");*/
         inddDoc = session.createDocumentModel(
                 workspace.getPathAsString(),blob.getFilename(),"File");
-        inddDoc.setPropertyValue("file:content", (Serializable) inddBlob);
-        inddDoc.setPropertyValue("dc:title",inddBlob.getFilename());
+        inddDoc.setPropertyValue("file:content", (Serializable) blob);
+        inddDoc.setPropertyValue("dc:title",blob.getFilename());
         inddDoc = session.createDocument(inddDoc);
 
 

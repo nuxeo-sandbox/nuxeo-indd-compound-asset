@@ -67,7 +67,7 @@ public class TestInddPackageImporter {
         DocumentModel compound = fileManager.createDocumentFromBlob(coreSession,blob,root.getPathAsString(),true,file.getName());
         Assert.assertNotNull(compound);
 
-        Assert.assertEquals("sample.indd",compound.getPropertyValue("dc:title"));
+        Assert.assertEquals("sample.zip",compound.getPropertyValue("dc:title"));
 
         String elements[] = (String[]) compound.getPropertyValue(COMPONENTS_XPATH);
         Assert.assertEquals(3,elements.length);
