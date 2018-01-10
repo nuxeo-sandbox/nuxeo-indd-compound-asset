@@ -135,18 +135,16 @@ public class InddPackageImporter extends AbstractFileImporter {
         }
 
         DocumentModel inddDoc;
-        if (pdfPreviewEntry!=null) {
-            Blob pdfBlob = new FileBlob(zipFile.getInputStream(pdfPreviewEntry));
-            pdfBlob.setFilename(getFilename(pdfPreviewEntry.getName()));
-            inddDoc = fileManager.createDocumentFromBlob(
-                    session, pdfBlob, workspace.getPathAsString(), true, getFilename(inddEntry.getName()));
-        } else {
-            inddDoc = session.createDocumentModel(
-                    workspace.getPathAsString(),blob.getFilename(),"File");
-            inddDoc.setPropertyValue("file:content", (Serializable) blob);
-            inddDoc.setPropertyValue("dc:title",blob.getFilename());
-            inddDoc = session.createDocument(inddDoc);
-        }
+
+        Blob inddBlob = new FileBlob(zipFile.getInputStream(inddEntry));
+        inddBlob.setFilename(getFilename(inddEntry.getName()));
+        inddBlob.setMimeType("application/x-indesign");
+        inddDoc = session.createDocumentModel(
+                workspace.getPathAsString(),blob.getFilename(),"File");
+        inddDoc.setPropertyValue("file:content", (Serializable) inddBlob);
+        inddDoc.setPropertyValue("dc:title",inddBlob.getFilename());
+        inddDoc = session.createDocument(inddDoc);
+
 
         inddDoc.addFacet(COMPOUND_FACET);
 
