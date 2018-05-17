@@ -47,14 +47,14 @@ public class InddPackageImporter extends AbstractFileImporter {
     public static final String INDD_EXT = ".indd";
     public static final String PDF_EXT = ".pdf";
 
-    public static final String COMPOUND_FACET = "Compound";
-    public static final String COMPONENT_FACET = "Component";
+    public static final String COMPOUND_FACET = "CompoundDocument";
+    public static final String COMPONENT_FACET = "ComponentDocument";
 
-    public static final String COMPONENTS_XPATH = "compound:components";
+    public static final String COMPONENTS_XPATH = "compound:docs";
     public static final String ARCHIVE_XPATH = "compound:archive";
     public static final String RENDITIONS_XPATH = "compound:renditions";
 
-    public static final String COMPOUNDS_XPATH = "acomponent:compounds";
+    public static final String COMPOUNDS_XPATH = "componentdoc:usedin";
 
     public static final String CONTAINER_TYPE = "Workspace";
 

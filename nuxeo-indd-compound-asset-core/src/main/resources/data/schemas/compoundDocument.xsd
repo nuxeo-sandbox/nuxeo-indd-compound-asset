@@ -34,5 +34,7 @@
       <xs:element name="item" type="nxs:content" minOccurs="0" maxOccurs="unbounded"/> 
     </xs:sequence> 
   </xs:complexType>
-  <xs:element name="compounds" type="nxs:stringList"/>
+  <xs:element name="docs" type="nxs:stringList"/>
+  <xs:element name="archive" type="nxs:content"/>
+  <xs:element name="renditions" type="nxs:blobList"/>
 </xs:schema>
