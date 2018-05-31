@@ -110,7 +110,7 @@ public class InddPackageImporter extends AbstractFileImporter {
             }
 
             if (fileName.toLowerCase().endsWith(PDF_EXT)) {
-                Blob fileBlob = new FileBlob(zipFile.getInputStream(entry));
+                Blob fileBlob = new FileBlob(zipFile.getInputStream(entry),"application/pdf");
                 fileBlob.setFilename(getFilename(fileName));
                 renditions.add(fileBlob);
                 pdfPreviewEntry = entry;
