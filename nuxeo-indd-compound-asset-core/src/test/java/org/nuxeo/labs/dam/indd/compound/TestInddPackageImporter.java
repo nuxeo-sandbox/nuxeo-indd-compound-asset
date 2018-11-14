@@ -50,7 +50,9 @@ import static org.nuxeo.labs.dam.indd.compound.InddPackageImporter.COMPOUNDS_XPA
 @Deploy({
     "nuxeo-indd-compound-asset-core",
     "org.nuxeo.ecm.platform.filemanager.core",
-    "org.nuxeo.ecm.platform.types.core"})
+    "org.nuxeo.ecm.platform.types.core",
+    "org.nuxeo.adobe.cc.nuxeo-adobe-connector-core"
+})
 public class TestInddPackageImporter {
 
     @Inject

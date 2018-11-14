@@ -1,4 +1,5 @@
 <component name="org.nuxeo.labs.dam.indd.compound.filemanager.schema">
+    <require>org.nuxeo.adobe.connector.doc.types</require>
     <extension target="org.nuxeo.ecm.core.schema.TypeService" point="schema">
         <schema name="compoundDocument" prefix="compound" override="true" src="data/schemas/compoundDocument.xsd"/>
         <schema name="componentDocument" prefix="componentdoc" override="true" src="data/schemas/componentDocument.xsd"/>
