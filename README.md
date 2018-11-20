@@ -1,6 +1,7 @@
 nuxeo-indd-compound-asset
 =============================
 
+[![Build Status](https://qa.nuxeo.org/jenkins/buildStatus/icon?job=Sandbox/sandbox_nuxeo-indd-compound-asset-master)](https://qa.nuxeo.org/jenkins/job/Sandbox/job/sandbox_nuxeo-indd-compound-asset-master/)
 
 ## List of Features (details below)
 
