@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.nuxeo.labs.dam.indd.compound</groupId>
     <artifactId>nuxeo-indd-compound-asset-parent</artifactId>
-    <version>9.10-SNAPSHOT</version>
+    <version>10.10-SNAPSHOT</version>
   </parent>
   <artifactId>nuxeo-indd-compound-asset-core</artifactId>
   <name>Nuxeo indd compound asset core</name>
@@ -36,7 +36,7 @@
     <dependency>
       <groupId>org.nuxeo</groupId>
       <artifactId>nuxeo-adobe-connector-core</artifactId>
-      <version>9.10</version>
+      <version>10.10-SNAPSHOT</version>
     </dependency>
 
     <dependency>
