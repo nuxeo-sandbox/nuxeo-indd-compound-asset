@@ -30,6 +30,7 @@ import org.nuxeo.ecm.core.api.impl.blob.FileBlob;
 import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
+import org.nuxeo.ecm.platform.filemanager.api.FileImporterContext;
 import org.nuxeo.ecm.platform.filemanager.api.FileManager;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
 import org.nuxeo.runtime.test.runner.Deploy;
@@ -66,7 +67,14 @@ public class TestInddPackageImporter {
         File file = new File(getClass().getResource("/files/sample.zip").getPath());
         Blob blob = new FileBlob(file);
         DocumentModel root = coreSession.getRootDocument();
-        DocumentModel compound = fileManager.createDocumentFromBlob(coreSession,blob,root.getPathAsString(),true,file.getName());
+
+        FileImporterContext context = FileImporterContext.builder(coreSession,
+                blob, root.getPathAsString())
+                .overwrite(true)
+                .fileName(blob.getFilename())
+                .build();
+        DocumentModel compound = fileManager.createOrUpdateDocument(context);
+
         Assert.assertNotNull(compound);
 
         Assert.assertEquals("sample.indd",compound.getPropertyValue("dc:title"));

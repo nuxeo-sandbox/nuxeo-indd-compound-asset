@@ -25,6 +25,7 @@ import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.*;
 import org.nuxeo.ecm.core.api.impl.DocumentModelListImpl;
 import org.nuxeo.ecm.core.api.impl.blob.FileBlob;
+import org.nuxeo.ecm.platform.filemanager.api.FileImporterContext;
 import org.nuxeo.ecm.platform.filemanager.api.FileManager;
 import org.nuxeo.ecm.platform.filemanager.service.extension.AbstractFileImporter;
 import org.nuxeo.ecm.platform.types.TypeManager;
@@ -176,18 +177,19 @@ public class InddPackageImporter extends AbstractFileImporter {
 
     }
 
-    public DocumentModel create(CoreSession session, Blob content, String path, boolean overwrite,
-                                String filename, TypeManager typeService) throws IOException {
-        try (CloseableFile source = content.getCloseableFile()) {
+    @Override
+    public DocumentModel createOrUpdate(FileImporterContext context) throws IOException {
+        try (CloseableFile source = context.getBlob().getCloseableFile()) {
             try (ZipFile zip = new ZipFile(source.getFile())) {
                 if (!isValid(zip)) {
                     return null;
                 }
-                String name = filename.substring(0, filename.length() - 4);
-                DocumentModel workspace = session.createDocumentModel(path,name,CONTAINER_TYPE);
+                String name = context.getFileName().substring(0, context.getFileName().length() - 4);
+                DocumentModel workspace = context.getSession().createDocumentModel(
+                        context.getParentPath(),name,CONTAINER_TYPE);
                 workspace.setPropertyValue("dc:title",name);
-                workspace = session.createDocument(workspace);
-                return unzip(session,workspace,zip,content);
+                workspace = context.getSession().createDocument(workspace);
+                return unzip(context.getSession(),workspace,zip,context.getBlob());
             }
         }
     }
