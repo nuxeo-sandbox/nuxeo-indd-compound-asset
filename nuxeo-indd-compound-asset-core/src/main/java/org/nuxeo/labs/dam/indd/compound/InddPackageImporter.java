@@ -184,7 +184,17 @@ public class InddPackageImporter extends AbstractFileImporter {
                 if (!isValid(zip)) {
                     return null;
                 }
-                String name = context.getFileName().substring(0, context.getFileName().length() - 4);
+                String name;
+
+                if (context.getFileName()!=null) {
+                    name = context.getFileName();
+                } else {
+                    name = context.getBlob().getFilename();
+                    if (name.lastIndexOf(".")>0) {
+                        name = name.substring(0, name.lastIndexOf("."));
+                    }
+                }
+
                 DocumentModel workspace = context.getSession().createDocumentModel(
                         context.getParentPath(),name,CONTAINER_TYPE);
                 workspace.setPropertyValue("dc:title",name);

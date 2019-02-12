@@ -71,7 +71,6 @@ public class TestInddPackageImporter {
         FileImporterContext context = FileImporterContext.builder(coreSession,
                 blob, root.getPathAsString())
                 .overwrite(true)
-                .fileName(blob.getFilename())
                 .build();
         DocumentModel compound = fileManager.createOrUpdateDocument(context);
 
