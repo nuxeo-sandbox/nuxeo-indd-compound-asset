@@ -22,13 +22,16 @@ package org.nuxeo.labs.dam.indd.compound;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.nuxeo.ecm.core.api.*;
+import org.nuxeo.ecm.core.api.Blob;
+import org.nuxeo.ecm.core.api.CloseableFile;
+import org.nuxeo.ecm.core.api.CoreSession;
+import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.impl.DocumentModelListImpl;
 import org.nuxeo.ecm.core.api.impl.blob.FileBlob;
 import org.nuxeo.ecm.platform.filemanager.api.FileImporterContext;
 import org.nuxeo.ecm.platform.filemanager.api.FileManager;
 import org.nuxeo.ecm.platform.filemanager.service.extension.AbstractFileImporter;
-import org.nuxeo.ecm.platform.types.TypeManager;
 import org.nuxeo.runtime.api.Framework;
 
 import java.io.IOException;
@@ -81,10 +84,9 @@ public class InddPackageImporter extends AbstractFileImporter {
 
     public DocumentModel unzip(CoreSession session, DocumentModel workspace, ZipFile zipFile, Blob blob)
             throws IOException {
-        FileManager fileManager = Framework.getLocalService(FileManager.class);
+        FileManager fileManager = Framework.getService(FileManager.class);
         Enumeration<? extends ZipEntry> entries = zipFile.entries();
         ZipEntry inddEntry = null;
-        ZipEntry pdfPreviewEntry = null;
         List<Blob> renditions = new ArrayList<>();
 
         DocumentModelList components = new DocumentModelListImpl();
@@ -114,7 +116,6 @@ public class InddPackageImporter extends AbstractFileImporter {
                 Blob fileBlob = new FileBlob(zipFile.getInputStream(entry),"application/pdf");
                 fileBlob.setFilename(getFilename(fileName));
                 renditions.add(fileBlob);
-                pdfPreviewEntry = entry;
                 continue;
             }
 
@@ -128,9 +129,12 @@ public class InddPackageImporter extends AbstractFileImporter {
             } else {
                 Blob fileBlob = new FileBlob(zipFile.getInputStream(entry));
                 fileBlob.setFilename(name);
-
-                DocumentModel element = fileManager.createDocumentFromBlob(
-                        session, fileBlob, workspace.getPathAsString(), true, fileBlob.getFilename());
+                FileImporterContext context = FileImporterContext.builder(session,
+                        fileBlob, workspace.getPathAsString())
+                        .fileName(fileBlob.getFilename())
+                        .overwrite(true)
+                        .build();
+                DocumentModel element = fileManager.createOrUpdateDocument(context);
                 components.add(element);
             }
         }
@@ -140,11 +144,17 @@ public class InddPackageImporter extends AbstractFileImporter {
         Blob inddBlob = new FileBlob(zipFile.getInputStream(inddEntry));
         inddBlob.setFilename(getFilename(inddEntry.getName()));
         inddBlob.setMimeType("application/x-indesign");
-        inddDoc = session.createDocumentModel(
-                workspace.getPathAsString(),blob.getFilename(),"File");
+
+        FileImporterContext context = FileImporterContext.builder(session,
+                inddBlob, workspace.getPathAsString())
+                .fileName(inddBlob.getFilename())
+                .overwrite(true)
+                .build();
+
+        inddDoc = fileManager.createOrUpdateDocument(context);
         inddDoc.setPropertyValue("file:content", (Serializable) inddBlob);
         inddDoc.setPropertyValue("dc:title",inddBlob.getFilename());
-        inddDoc = session.createDocument(inddDoc);
+        inddDoc = session.saveDocument(inddDoc);
 
 
         inddDoc.addFacet(COMPOUND_FACET);
@@ -164,7 +174,7 @@ public class InddPackageImporter extends AbstractFileImporter {
              if (!component.hasFacet(COMPONENT_FACET)) {
                  component.addFacet(COMPONENT_FACET);
             }
-            String compounds[] = (String[]) component.getPropertyValue(COMPOUNDS_XPATH);
+            String[] compounds = (String[]) component.getPropertyValue(COMPOUNDS_XPATH);
             List<String> compoundList = compounds != null ? new ArrayList<>(Arrays.asList(compounds)) : new ArrayList<>();
             if (!compoundList.contains(inddDoc.getId())) {
                 compoundList.add(inddDoc.getId());

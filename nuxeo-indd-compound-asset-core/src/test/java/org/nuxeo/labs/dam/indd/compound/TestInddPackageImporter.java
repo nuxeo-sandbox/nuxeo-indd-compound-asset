@@ -50,8 +50,8 @@ import static org.nuxeo.labs.dam.indd.compound.InddPackageImporter.COMPOUNDS_XPA
 @RepositoryConfig(init = DefaultRepositoryInit.class, cleanup = Granularity.METHOD)
 @Deploy({
     "nuxeo-indd-compound-asset-core",
-    "org.nuxeo.ecm.platform.filemanager.core",
-    "org.nuxeo.ecm.platform.types.core",
+    "org.nuxeo.ecm.platform.filemanager",
+    "org.nuxeo.ecm.platform.types",
     "org.nuxeo.adobe.cc.nuxeo-adobe-connector-core"
 })
 public class TestInddPackageImporter {
@@ -85,7 +85,7 @@ public class TestInddPackageImporter {
         Assert.assertEquals(1,renditions.size());
 
         DocumentModel folder = coreSession.getDocument(compound.getParentRef());
-        Assert.assertEquals("sample",folder.getPropertyValue("dc:title"));
+        Assert.assertEquals("sample.zip",folder.getPropertyValue("dc:title"));
 
         DocumentModelList children = coreSession.getChildren(compound.getParentRef());
         Assert.assertEquals(4,children.totalSize());

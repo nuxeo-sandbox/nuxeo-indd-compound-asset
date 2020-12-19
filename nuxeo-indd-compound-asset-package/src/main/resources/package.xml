@@ -3,8 +3,8 @@
   <title>Nuxeo Adobe InDesign Package Compound Assets</title>
   <description>
     <p>This plugin provides support for Adobe InDesign packages.
-       Packages are managed in the Nuxeo Platform as Workspaces, with the plug-in adding
-       relationships between the indd file and the resources contained in the package.</p>
+      Packages are managed in the Nuxeo Platform as Workspaces, with the plug-in adding
+      relationships between the indd file and the resources contained in the package.</p>
   </description>
   <!-- <home-page>http://doc.nuxeo.com/</home-page> -->
   <vendor>Nuxeo</vendor>
@@ -17,8 +17,7 @@
   <!-- Production State: production_ready | testing | proto -->
   <production-state>testing</production-state>
   <platforms>
-    <platform>server-@DISTRIB_VERSION@</platform>
-    <platform>server-@DISTRIB_VERSION@-HF*</platform>
+    <platform>server-@NUXEO_TARGET_VERSION@</platform>
   </platforms>
   <!-- Dependencies on other packages -->
   <!-- <dependencies> -->
@@ -41,3 +40,4 @@
   <!-- Visibility: PRIVATE | MARKETPLACE | DEV | PUBLIC -->
   <visibility>PUBLIC</visibility>
 </package>
+
