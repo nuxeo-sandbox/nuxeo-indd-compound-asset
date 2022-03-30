@@ -5,9 +5,9 @@ nuxeo-indd-compound-asset
 
 ## List of Features
 
-This plugin provides a filemanager plugin to import InDesign packages in the Nuxeo Platform.
+This plugin provides a [filemanager](https://doc.nuxeo.com/nxdoc/file-manager/) plugin to import InDesign packages into the Nuxeo Platform.
 
-Input: an InDesign package (a zip file as described [here](https://helpx.adobe.com/indesign/how-to/indesign-package-files-for-handoff.html)). Note that there is a sample included [in this repo](nuxeo-indd-compound-asset-core/src/test/resources/files/sample.zip).
+Input: an InDesign package (which is a zip, as described [here](https://helpx.adobe.com/indesign/how-to/indesign-package-files-for-handoff.html)). Note that there is a sample included [in this repo](nuxeo-indd-compound-asset-core/src/test/resources/files/sample.zip).
 
 Result: the plug-in creates the following:
 
@@ -17,12 +17,16 @@ Result: the plug-in creates the following:
       * The PDF preview, if provided, in `compound:renditions`
       * A list of related/linked asset document ids in `compound:docs`
       * The `CompoundDocument` facet
-    * Copies of all package files. Each document has:
+    * Copies of some package files. Each document has:
       * A link to the parent indd file in `componentdoc:usedin`
       * The `ComponentDocument` facet
-      * Note that the `document fonts` folder, `txt`, and `imdl` files are ignored
+    * Note that the `document fonts` folder, `txt`, and `imdl` files [are ignored](https://github.com/nuxeo-sandbox/nuxeo-indd-compound-asset/blob/c8a0c5184ebabdaaa73665f69a05ca601e0c5499/nuxeo-indd-compound-asset-core/src/main/java/org/nuxeo/labs/dam/indd/compound/InddPackageImporter.java#L96)
 
-Note that all extracted documents are stored within a Workspace (i.e. there is no folder hierarchy). Also note that when creating an InDesign package there is an option to include a PDF rendition. This is recommended as the OOTB preview of an `indd` file has low fidelity.
+Note:
+
+* The extracted content is flat. Any folder hierarchy is *not* preserved.
+* The import checks to see if any extracted content already exists in the repository. This is done using a [simple search](https://github.com/nuxeo-sandbox/nuxeo-indd-compound-asset/blob/c8a0c5184ebabdaaa73665f69a05ca601e0c5499/nuxeo-indd-compound-asset-core/src/main/java/org/nuxeo/labs/dam/indd/compound/InddPackageImporter.java#L124) based on file name, comparing it to the `dc:title` field. If a match is found, the matching document is linked via `compound:docs` instead of ingesting the content again.
+* When creating an InDesign package, there is an option to include a PDF rendition. Turn this on. The OOTB preview of an `indd` file has low fidelity, whereas the PDF rendition should support full resolution preview.
 
 ## Build
 
